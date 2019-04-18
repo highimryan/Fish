@@ -1,0 +1,695 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="FISHSURVEYModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Families">
+          <Key>
+            <PropertyRef Name="FamilyId" />
+          </Key>
+          <Property Name="FamilyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FamilyName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Species">
+          <Key>
+            <PropertyRef Name="SpeciesId" />
+          </Key>
+          <Property Name="SpeciesId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FamilyId" Type="int" Nullable="false" />
+          <Property Name="TrophicId" Type="int" Nullable="false" />
+          <Property Name="CommonName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ScientificName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Trophics">
+          <Key>
+            <PropertyRef Name="TrophicId" />
+          </Key>
+          <Property Name="TrophicId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TrophicLevel" Type="nvarchar" MaxLength="5" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Regions">
+          <Key>
+            <PropertyRef Name="RegionId" />
+          </Key>
+          <Property Name="RegionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RegionName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StudyAreas">
+          <Key>
+            <PropertyRef Name="StudyAreaId" />
+          </Key>
+          <Property Name="StudyAreaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StudyAreaName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SubRegionId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SubRegions">
+          <Key>
+            <PropertyRef Name="SubRegionId" />
+          </Key>
+          <Property Name="SubRegionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SubRegionName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="RegionId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BatchCodes">
+          <Key>
+            <PropertyRef Name="BatchCodeId" />
+          </Key>
+          <Property Name="BatchCodeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BatchCodeDescription" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SurveyYear" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Fishes">
+          <Key>
+            <PropertyRef Name="FishId" />
+          </Key>
+          <Property Name="FishId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StructureTypeId" Type="int" Nullable="false" />
+          <Property Name="FishLength" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="FishCount" Type="int" Nullable="false" />
+          <Property Name="SpeciesId" Type="int" Nullable="false" />
+          <Property Name="SurveyIndex" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Managements">
+          <Key>
+            <PropertyRef Name="ManagementId" />
+          </Key>
+          <Property Name="ManagementId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ManagementName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StructureTypes">
+          <Key>
+            <PropertyRef Name="StructureTypeId" />
+          </Key>
+          <Property Name="StructureTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StructureTypeDescription" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Surveys">
+          <Key>
+            <PropertyRef Name="SurveyIndex" />
+          </Key>
+          <Property Name="SurveyIndex" Type="int" Nullable="false" />
+          <Property Name="Latitude" Type="decimal" Precision="18" Scale="5" Nullable="false" />
+          <Property Name="Longitude" Type="decimal" Precision="18" Scale="5" Nullable="false" />
+          <Property Name="SurveyDate" Type="date" Nullable="false" />
+          <Property Name="StudyAreaId" Type="int" Nullable="false" />
+          <Property Name="ManagementId" Type="int" Nullable="false" />
+          <Property Name="BatchCodeId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_FISH_Families">
+          <End Role="Families" Type="Self.Families" Multiplicity="1" />
+          <End Role="Species" Type="Self.Species" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Families">
+              <PropertyRef Name="FamilyId" />
+            </Principal>
+            <Dependent Role="Species">
+              <PropertyRef Name="FamilyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FISH_SPECIES">
+          <End Role="Species" Type="Self.Species" Multiplicity="1" />
+          <End Role="Fishes" Type="Self.Fishes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Species">
+              <PropertyRef Name="SpeciesId" />
+            </Principal>
+            <Dependent Role="Fishes">
+              <PropertyRef Name="SpeciesId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FISH_Trophics">
+          <End Role="Trophics" Type="Self.Trophics" Multiplicity="1" />
+          <End Role="Species" Type="Self.Species" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Trophics">
+              <PropertyRef Name="TrophicId" />
+            </Principal>
+            <Dependent Role="Species">
+              <PropertyRef Name="TrophicId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GEO_Regions">
+          <End Role="Regions" Type="Self.Regions" Multiplicity="1" />
+          <End Role="SubRegions" Type="Self.SubRegions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Regions">
+              <PropertyRef Name="RegionId" />
+            </Principal>
+            <Dependent Role="SubRegions">
+              <PropertyRef Name="RegionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GEO_StudyAreas">
+          <End Role="StudyAreas" Type="Self.StudyAreas" Multiplicity="1" />
+          <End Role="Surveys" Type="Self.Surveys" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StudyAreas">
+              <PropertyRef Name="StudyAreaId" />
+            </Principal>
+            <Dependent Role="Surveys">
+              <PropertyRef Name="StudyAreaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GEO_SubRegions">
+          <End Role="SubRegions" Type="Self.SubRegions" Multiplicity="1" />
+          <End Role="StudyAreas" Type="Self.StudyAreas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubRegions">
+              <PropertyRef Name="SubRegionId" />
+            </Principal>
+            <Dependent Role="StudyAreas">
+              <PropertyRef Name="SubRegionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SURVEY_BatchCodes">
+          <End Role="BatchCodes" Type="Self.BatchCodes" Multiplicity="1" />
+          <End Role="Surveys" Type="Self.Surveys" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BatchCodes">
+              <PropertyRef Name="BatchCodeId" />
+            </Principal>
+            <Dependent Role="Surveys">
+              <PropertyRef Name="BatchCodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SURVEY_Managements">
+          <End Role="Managements" Type="Self.Managements" Multiplicity="1" />
+          <End Role="Surveys" Type="Self.Surveys" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Managements">
+              <PropertyRef Name="ManagementId" />
+            </Principal>
+            <Dependent Role="Surveys">
+              <PropertyRef Name="ManagementId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SURVEY_STRUCTURETYPEs">
+          <End Role="StructureTypes" Type="Self.StructureTypes" Multiplicity="1" />
+          <End Role="Fishes" Type="Self.Fishes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StructureTypes">
+              <PropertyRef Name="StructureTypeId" />
+            </Principal>
+            <Dependent Role="Fishes">
+              <PropertyRef Name="StructureTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SURVEY_Surveys">
+          <End Role="Surveys" Type="Self.Surveys" Multiplicity="1" />
+          <End Role="Fishes" Type="Self.Fishes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Surveys">
+              <PropertyRef Name="SurveyIndex" />
+            </Principal>
+            <Dependent Role="Fishes">
+              <PropertyRef Name="SurveyIndex" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FISHSURVEYModelStoreContainer">
+          <EntitySet Name="Families" EntityType="Self.Families" Schema="FISH" store:Type="Tables" />
+          <EntitySet Name="Species" EntityType="Self.Species" Schema="FISH" store:Type="Tables" />
+          <EntitySet Name="Trophics" EntityType="Self.Trophics" Schema="FISH" store:Type="Tables" />
+          <EntitySet Name="Regions" EntityType="Self.Regions" Schema="GEO" store:Type="Tables" />
+          <EntitySet Name="StudyAreas" EntityType="Self.StudyAreas" Schema="GEO" store:Type="Tables" />
+          <EntitySet Name="SubRegions" EntityType="Self.SubRegions" Schema="GEO" store:Type="Tables" />
+          <EntitySet Name="BatchCodes" EntityType="Self.BatchCodes" Schema="SURVEY" store:Type="Tables" />
+          <EntitySet Name="Fishes" EntityType="Self.Fishes" Schema="SURVEY" store:Type="Tables" />
+          <EntitySet Name="Managements" EntityType="Self.Managements" Schema="SURVEY" store:Type="Tables" />
+          <EntitySet Name="StructureTypes" EntityType="Self.StructureTypes" Schema="SURVEY" store:Type="Tables" />
+          <EntitySet Name="Surveys" EntityType="Self.Surveys" Schema="SURVEY" store:Type="Tables" />
+          <AssociationSet Name="FK_FISH_Families" Association="Self.FK_FISH_Families">
+            <End Role="Families" EntitySet="Families" />
+            <End Role="Species" EntitySet="Species" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FISH_SPECIES" Association="Self.FK_FISH_SPECIES">
+            <End Role="Species" EntitySet="Species" />
+            <End Role="Fishes" EntitySet="Fishes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FISH_Trophics" Association="Self.FK_FISH_Trophics">
+            <End Role="Trophics" EntitySet="Trophics" />
+            <End Role="Species" EntitySet="Species" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GEO_Regions" Association="Self.FK_GEO_Regions">
+            <End Role="Regions" EntitySet="Regions" />
+            <End Role="SubRegions" EntitySet="SubRegions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GEO_StudyAreas" Association="Self.FK_GEO_StudyAreas">
+            <End Role="StudyAreas" EntitySet="StudyAreas" />
+            <End Role="Surveys" EntitySet="Surveys" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GEO_SubRegions" Association="Self.FK_GEO_SubRegions">
+            <End Role="SubRegions" EntitySet="SubRegions" />
+            <End Role="StudyAreas" EntitySet="StudyAreas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SURVEY_BatchCodes" Association="Self.FK_SURVEY_BatchCodes">
+            <End Role="BatchCodes" EntitySet="BatchCodes" />
+            <End Role="Surveys" EntitySet="Surveys" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SURVEY_Managements" Association="Self.FK_SURVEY_Managements">
+            <End Role="Managements" EntitySet="Managements" />
+            <End Role="Surveys" EntitySet="Surveys" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SURVEY_STRUCTURETYPEs" Association="Self.FK_SURVEY_STRUCTURETYPEs">
+            <End Role="StructureTypes" EntitySet="StructureTypes" />
+            <End Role="Fishes" EntitySet="Fishes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SURVEY_Surveys" Association="Self.FK_SURVEY_Surveys">
+            <End Role="Surveys" EntitySet="Surveys" />
+            <End Role="Fishes" EntitySet="Fishes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FISHSURVEYModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Family">
+          <Key>
+            <PropertyRef Name="FamilyId" />
+          </Key>
+          <Property Name="FamilyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FamilyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Species" Relationship="Self.FK_FISH_Families" FromRole="Families" ToRole="Species" />
+        </EntityType>
+        <EntityType Name="Species">
+          <Key>
+            <PropertyRef Name="SpeciesId" />
+          </Key>
+          <Property Name="SpeciesId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FamilyId" Type="Int32" Nullable="false" />
+          <Property Name="TrophicId" Type="Int32" Nullable="false" />
+          <Property Name="CommonName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ScientificName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Family" Relationship="Self.FK_FISH_Families" FromRole="Species" ToRole="Families" />
+          <NavigationProperty Name="Fishes" Relationship="Self.FK_FISH_SPECIES" FromRole="Species" ToRole="Fishes" />
+          <NavigationProperty Name="Trophic" Relationship="Self.FK_FISH_Trophics" FromRole="Species" ToRole="Trophics" />
+        </EntityType>
+        <EntityType Name="Trophic">
+          <Key>
+            <PropertyRef Name="TrophicId" />
+          </Key>
+          <Property Name="TrophicId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TrophicLevel" Type="String" MaxLength="5" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Species" Relationship="Self.FK_FISH_Trophics" FromRole="Trophics" ToRole="Species" />
+        </EntityType>
+        <EntityType Name="Region">
+          <Key>
+            <PropertyRef Name="RegionId" />
+          </Key>
+          <Property Name="RegionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RegionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="SubRegions" Relationship="Self.FK_GEO_Regions" FromRole="Regions" ToRole="SubRegions" />
+        </EntityType>
+        <EntityType Name="StudyArea">
+          <Key>
+            <PropertyRef Name="StudyAreaId" />
+          </Key>
+          <Property Name="StudyAreaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StudyAreaName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SubRegionId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Surveys" Relationship="Self.FK_GEO_StudyAreas" FromRole="StudyAreas" ToRole="Surveys" />
+          <NavigationProperty Name="SubRegion" Relationship="Self.FK_GEO_SubRegions" FromRole="StudyAreas" ToRole="SubRegions" />
+        </EntityType>
+        <EntityType Name="SubRegion">
+          <Key>
+            <PropertyRef Name="SubRegionId" />
+          </Key>
+          <Property Name="SubRegionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SubRegionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RegionId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Region" Relationship="Self.FK_GEO_Regions" FromRole="SubRegions" ToRole="Regions" />
+          <NavigationProperty Name="StudyAreas" Relationship="Self.FK_GEO_SubRegions" FromRole="SubRegions" ToRole="StudyAreas" />
+        </EntityType>
+        <EntityType Name="BatchCode">
+          <Key>
+            <PropertyRef Name="BatchCodeId" />
+          </Key>
+          <Property Name="BatchCodeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BatchCodeDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SurveyYear" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Surveys" Relationship="Self.FK_SURVEY_BatchCodes" FromRole="BatchCodes" ToRole="Surveys" />
+        </EntityType>
+        <EntityType Name="Fish">
+          <Key>
+            <PropertyRef Name="FishId" />
+          </Key>
+          <Property Name="FishId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StructureTypeId" Type="Int32" Nullable="false" />
+          <Property Name="FishLength" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="FishCount" Type="Int32" Nullable="false" />
+          <Property Name="SpeciesId" Type="Int32" Nullable="false" />
+          <Property Name="SurveyIndex" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Species" Relationship="Self.FK_FISH_SPECIES" FromRole="Fishes" ToRole="Species" />
+          <NavigationProperty Name="StructureType" Relationship="Self.FK_SURVEY_STRUCTURETYPEs" FromRole="Fishes" ToRole="StructureTypes" />
+          <NavigationProperty Name="Survey" Relationship="Self.FK_SURVEY_Surveys" FromRole="Fishes" ToRole="Surveys" />
+        </EntityType>
+        <EntityType Name="Management">
+          <Key>
+            <PropertyRef Name="ManagementId" />
+          </Key>
+          <Property Name="ManagementId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ManagementName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Surveys" Relationship="Self.FK_SURVEY_Managements" FromRole="Managements" ToRole="Surveys" />
+        </EntityType>
+        <EntityType Name="StructureType">
+          <Key>
+            <PropertyRef Name="StructureTypeId" />
+          </Key>
+          <Property Name="StructureTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StructureTypeDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Fishes" Relationship="Self.FK_SURVEY_STRUCTURETYPEs" FromRole="StructureTypes" ToRole="Fishes" />
+        </EntityType>
+        <EntityType Name="Survey">
+          <Key>
+            <PropertyRef Name="SurveyIndex" />
+          </Key>
+          <Property Name="SurveyIndex" Type="Int32" Nullable="false" />
+          <Property Name="Latitude" Type="Decimal" Precision="18" Scale="5" Nullable="false" />
+          <Property Name="Longitude" Type="Decimal" Precision="18" Scale="5" Nullable="false" />
+          <Property Name="SurveyDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="StudyAreaId" Type="Int32" Nullable="false" />
+          <Property Name="ManagementId" Type="Int32" Nullable="false" />
+          <Property Name="BatchCodeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="StudyArea" Relationship="Self.FK_GEO_StudyAreas" FromRole="Surveys" ToRole="StudyAreas" />
+          <NavigationProperty Name="BatchCode" Relationship="Self.FK_SURVEY_BatchCodes" FromRole="Surveys" ToRole="BatchCodes" />
+          <NavigationProperty Name="Fishes" Relationship="Self.FK_SURVEY_Surveys" FromRole="Surveys" ToRole="Fishes" />
+          <NavigationProperty Name="Management" Relationship="Self.FK_SURVEY_Managements" FromRole="Surveys" ToRole="Managements" />
+        </EntityType>
+        <Association Name="FK_FISH_Families">
+          <End Role="Families" Type="Self.Family" Multiplicity="1" />
+          <End Role="Species" Type="Self.Species" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Families">
+              <PropertyRef Name="FamilyId" />
+            </Principal>
+            <Dependent Role="Species">
+              <PropertyRef Name="FamilyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FISH_SPECIES">
+          <End Role="Species" Type="Self.Species" Multiplicity="1" />
+          <End Role="Fishes" Type="Self.Fish" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Species">
+              <PropertyRef Name="SpeciesId" />
+            </Principal>
+            <Dependent Role="Fishes">
+              <PropertyRef Name="SpeciesId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FISH_Trophics">
+          <End Role="Trophics" Type="Self.Trophic" Multiplicity="1" />
+          <End Role="Species" Type="Self.Species" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Trophics">
+              <PropertyRef Name="TrophicId" />
+            </Principal>
+            <Dependent Role="Species">
+              <PropertyRef Name="TrophicId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GEO_Regions">
+          <End Role="Regions" Type="Self.Region" Multiplicity="1" />
+          <End Role="SubRegions" Type="Self.SubRegion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Regions">
+              <PropertyRef Name="RegionId" />
+            </Principal>
+            <Dependent Role="SubRegions">
+              <PropertyRef Name="RegionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GEO_StudyAreas">
+          <End Role="StudyAreas" Type="Self.StudyArea" Multiplicity="1" />
+          <End Role="Surveys" Type="Self.Survey" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StudyAreas">
+              <PropertyRef Name="StudyAreaId" />
+            </Principal>
+            <Dependent Role="Surveys">
+              <PropertyRef Name="StudyAreaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GEO_SubRegions">
+          <End Role="SubRegions" Type="Self.SubRegion" Multiplicity="1" />
+          <End Role="StudyAreas" Type="Self.StudyArea" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubRegions">
+              <PropertyRef Name="SubRegionId" />
+            </Principal>
+            <Dependent Role="StudyAreas">
+              <PropertyRef Name="SubRegionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SURVEY_BatchCodes">
+          <End Role="BatchCodes" Type="Self.BatchCode" Multiplicity="1" />
+          <End Role="Surveys" Type="Self.Survey" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BatchCodes">
+              <PropertyRef Name="BatchCodeId" />
+            </Principal>
+            <Dependent Role="Surveys">
+              <PropertyRef Name="BatchCodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SURVEY_STRUCTURETYPEs">
+          <End Role="StructureTypes" Type="Self.StructureType" Multiplicity="1" />
+          <End Role="Fishes" Type="Self.Fish" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StructureTypes">
+              <PropertyRef Name="StructureTypeId" />
+            </Principal>
+            <Dependent Role="Fishes">
+              <PropertyRef Name="StructureTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SURVEY_Surveys">
+          <End Role="Surveys" Type="Self.Survey" Multiplicity="1" />
+          <End Role="Fishes" Type="Self.Fish" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Surveys">
+              <PropertyRef Name="SurveyIndex" />
+            </Principal>
+            <Dependent Role="Fishes">
+              <PropertyRef Name="SurveyIndex" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SURVEY_Managements">
+          <End Role="Managements" Type="Self.Management" Multiplicity="1" />
+          <End Role="Surveys" Type="Self.Survey" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Managements">
+              <PropertyRef Name="ManagementId" />
+            </Principal>
+            <Dependent Role="Surveys">
+              <PropertyRef Name="ManagementId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FISHSURVEYEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Families" EntityType="Self.Family" />
+          <EntitySet Name="Species" EntityType="Self.Species" />
+          <EntitySet Name="Trophics" EntityType="Self.Trophic" />
+          <EntitySet Name="Regions" EntityType="Self.Region" />
+          <EntitySet Name="StudyAreas" EntityType="Self.StudyArea" />
+          <EntitySet Name="SubRegions" EntityType="Self.SubRegion" />
+          <EntitySet Name="BatchCodes" EntityType="Self.BatchCode" />
+          <EntitySet Name="Fishes" EntityType="Self.Fish" />
+          <EntitySet Name="Managements" EntityType="Self.Management" />
+          <EntitySet Name="StructureTypes" EntityType="Self.StructureType" />
+          <EntitySet Name="Surveys" EntityType="Self.Survey" />
+          <AssociationSet Name="FK_FISH_Families" Association="Self.FK_FISH_Families">
+            <End Role="Families" EntitySet="Families" />
+            <End Role="Species" EntitySet="Species" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FISH_SPECIES" Association="Self.FK_FISH_SPECIES">
+            <End Role="Species" EntitySet="Species" />
+            <End Role="Fishes" EntitySet="Fishes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FISH_Trophics" Association="Self.FK_FISH_Trophics">
+            <End Role="Trophics" EntitySet="Trophics" />
+            <End Role="Species" EntitySet="Species" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GEO_Regions" Association="Self.FK_GEO_Regions">
+            <End Role="Regions" EntitySet="Regions" />
+            <End Role="SubRegions" EntitySet="SubRegions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GEO_StudyAreas" Association="Self.FK_GEO_StudyAreas">
+            <End Role="StudyAreas" EntitySet="StudyAreas" />
+            <End Role="Surveys" EntitySet="Surveys" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GEO_SubRegions" Association="Self.FK_GEO_SubRegions">
+            <End Role="SubRegions" EntitySet="SubRegions" />
+            <End Role="StudyAreas" EntitySet="StudyAreas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SURVEY_BatchCodes" Association="Self.FK_SURVEY_BatchCodes">
+            <End Role="BatchCodes" EntitySet="BatchCodes" />
+            <End Role="Surveys" EntitySet="Surveys" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SURVEY_STRUCTURETYPEs" Association="Self.FK_SURVEY_STRUCTURETYPEs">
+            <End Role="StructureTypes" EntitySet="StructureTypes" />
+            <End Role="Fishes" EntitySet="Fishes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SURVEY_Surveys" Association="Self.FK_SURVEY_Surveys">
+            <End Role="Surveys" EntitySet="Surveys" />
+            <End Role="Fishes" EntitySet="Fishes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SURVEY_Managements" Association="Self.FK_SURVEY_Managements">
+            <End Role="Managements" EntitySet="Managements" />
+            <End Role="Surveys" EntitySet="Surveys" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FISHSURVEYModelStoreContainer" CdmEntityContainer="FISHSURVEYEntities">
+          <EntitySetMapping Name="Families">
+            <EntityTypeMapping TypeName="FISHSURVEYModel.Family">
+              <MappingFragment StoreEntitySet="Families">
+                <ScalarProperty Name="FamilyId" ColumnName="FamilyId" />
+                <ScalarProperty Name="FamilyName" ColumnName="FamilyName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Species">
+            <EntityTypeMapping TypeName="FISHSURVEYModel.Species">
+              <MappingFragment StoreEntitySet="Species">
+                <ScalarProperty Name="SpeciesId" ColumnName="SpeciesId" />
+                <ScalarProperty Name="FamilyId" ColumnName="FamilyId" />
+                <ScalarProperty Name="TrophicId" ColumnName="TrophicId" />
+                <ScalarProperty Name="CommonName" ColumnName="CommonName" />
+                <ScalarProperty Name="ScientificName" ColumnName="ScientificName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Trophics">
+            <EntityTypeMapping TypeName="FISHSURVEYModel.Trophic">
+              <MappingFragment StoreEntitySet="Trophics">
+                <ScalarProperty Name="TrophicId" ColumnName="TrophicId" />
+                <ScalarProperty Name="TrophicLevel" ColumnName="TrophicLevel" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Regions">
+            <EntityTypeMapping TypeName="FISHSURVEYModel.Region">
+              <MappingFragment StoreEntitySet="Regions">
+                <ScalarProperty Name="RegionId" ColumnName="RegionId" />
+                <ScalarProperty Name="RegionName" ColumnName="RegionName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StudyAreas">
+            <EntityTypeMapping TypeName="FISHSURVEYModel.StudyArea">
+              <MappingFragment StoreEntitySet="StudyAreas">
+                <ScalarProperty Name="StudyAreaId" ColumnName="StudyAreaId" />
+                <ScalarProperty Name="StudyAreaName" ColumnName="StudyAreaName" />
+                <ScalarProperty Name="SubRegionId" ColumnName="SubRegionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubRegions">
+            <EntityTypeMapping TypeName="FISHSURVEYModel.SubRegion">
+              <MappingFragment StoreEntitySet="SubRegions">
+                <ScalarProperty Name="SubRegionId" ColumnName="SubRegionId" />
+                <ScalarProperty Name="SubRegionName" ColumnName="SubRegionName" />
+                <ScalarProperty Name="RegionId" ColumnName="RegionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BatchCodes">
+            <EntityTypeMapping TypeName="FISHSURVEYModel.BatchCode">
+              <MappingFragment StoreEntitySet="BatchCodes">
+                <ScalarProperty Name="BatchCodeId" ColumnName="BatchCodeId" />
+                <ScalarProperty Name="BatchCodeDescription" ColumnName="BatchCodeDescription" />
+                <ScalarProperty Name="SurveyYear" ColumnName="SurveyYear" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Fishes">
+            <EntityTypeMapping TypeName="FISHSURVEYModel.Fish">
+              <MappingFragment StoreEntitySet="Fishes">
+                <ScalarProperty Name="FishId" ColumnName="FishId" />
+                <ScalarProperty Name="StructureTypeId" ColumnName="StructureTypeId" />
+                <ScalarProperty Name="FishLength" ColumnName="FishLength" />
+                <ScalarProperty Name="FishCount" ColumnName="FishCount" />
+                <ScalarProperty Name="SpeciesId" ColumnName="SpeciesId" />
+                <ScalarProperty Name="SurveyIndex" ColumnName="SurveyIndex" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Managements">
+            <EntityTypeMapping TypeName="FISHSURVEYModel.Management">
+              <MappingFragment StoreEntitySet="Managements">
+                <ScalarProperty Name="ManagementId" ColumnName="ManagementId" />
+                <ScalarProperty Name="ManagementName" ColumnName="ManagementName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StructureTypes">
+            <EntityTypeMapping TypeName="FISHSURVEYModel.StructureType">
+              <MappingFragment StoreEntitySet="StructureTypes">
+                <ScalarProperty Name="StructureTypeId" ColumnName="StructureTypeId" />
+                <ScalarProperty Name="StructureTypeDescription" ColumnName="StructureTypeDescription" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Surveys">
+            <EntityTypeMapping TypeName="FISHSURVEYModel.Survey">
+              <MappingFragment StoreEntitySet="Surveys">
+                <ScalarProperty Name="SurveyIndex" ColumnName="SurveyIndex" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="SurveyDate" ColumnName="SurveyDate" />
+                <ScalarProperty Name="StudyAreaId" ColumnName="StudyAreaId" />
+                <ScalarProperty Name="ManagementId" ColumnName="ManagementId" />
+                <ScalarProperty Name="BatchCodeId" ColumnName="BatchCodeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

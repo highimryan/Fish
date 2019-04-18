@@ -1,0 +1,202 @@
+-- 1. Create an empty database called FISHSURVEY
+
+USE master;
+
+-- Drop previous database
+IF DB_ID(N'FISHSURVEY') IS NOT NULL DROP DATABASE FISHSURVEY;
+
+-- If database could not be created due to open connections, abort
+IF @@ERROR = 3702 
+   RAISERROR(N'Database cannot be dropped because there are still open connections.', 127, 127) WITH NOWAIT, LOG;
+
+-- Create database
+CREATE DATABASE FISHSURVEY;
+GO
+
+USE FISHSURVEY;
+GO
+
+---------------------------------------------------------------------
+-- Create Schemas
+---------------------------------------------------------------------
+CREATE SCHEMA FISH AUTHORIZATION dbo
+GO
+CREATE SCHEMA SURVEY AUTHORIZATION dbo
+GO
+CREATE SCHEMA GEO AUTHORIZATION dbo
+GO
+
+---------------------------------------------------------------------
+-- Create Tables
+---------------------------------------------------------------------
+
+-- Create table GEO.Region
+
+DROP TABLE IF EXISTS GEO.Region
+GO
+
+CREATE TABLE GEO.Region
+(
+    RegionId int          NOT NULL IDENTITY PRIMARY KEY,
+    Region   nvarchar(50) NOT NULL,
+);
+GO
+
+-- Create table GEO.SubRegion
+
+DROP TABLE IF EXISTS GEO.SubRegion
+GO
+
+CREATE TABLE GEO.SubRegion
+(
+    SubRegionId int          NOT NULL IDENTITY PRIMARY KEY,
+    SubRegion   nvarchar(50) NOT NULL,
+    RegionId    int          NOT NULL,
+    CONSTRAINT FK_GEO_Region FOREIGN KEY(RegionId)
+	  REFERENCES GEO.Region(RegionId)
+);
+GO
+
+
+-- Create table GEO.StudyArea
+
+DROP TABLE IF EXISTS GEO.StudyArea
+GO
+
+CREATE TABLE GEO.StudyArea
+(
+    StudyAreaId int          NOT NULL IDENTITY PRIMARY KEY,
+    StudyArea   nvarchar(50) NOT NULL,
+    SubRegionId int          NOT NULL,
+    CONSTRAINT FK_GEO_SubRegion FOREIGN KEY(SubRegionId)
+	  REFERENCES GEO.SubRegion(SubRegionId)
+);
+GO
+
+
+
+
+-- Create table SURVEY.Coord
+
+DROP TABLE IF EXISTS SURVEY.Coord
+GO
+
+CREATE TABLE SURVEY.Coord
+(
+    CoordId    int         NOT NULL IDENTITY PRIMARY KEY,
+    Latitude   decimal(10) NOT NULL,
+    Longtitude decimal(10) NOT NULL
+);
+GO
+
+
+-- Create table SURVEY.BatchCode
+
+DROP TABLE IF EXISTS SURVEY.BatchCode
+GO
+
+CREATE TABLE SURVEY.BatchCode
+(
+    BatchCodeId int          NOT NULL IDENTITY PRIMARY KEY,
+    BatchCode   nvarchar(50) NOT NULL,
+    SurveyYear  date         NOT NULL
+);
+GO
+
+-- Create table SURVEY.management
+
+DROP TABLE IF EXISTS SURVEY.Management
+GO
+
+CREATE TABLE SURVEY.Management
+(
+    ManagementId   int          NOT NULL IDENTITY PRIMARY KEY,
+    ManagementName nvarchar(50) NOT NULL,
+);
+GO
+
+-- Create table SURVEY.structuretype
+
+DROP TABLE IF EXISTS SURVEY.StructureType
+GO
+
+CREATE TABLE SURVEY.StructureType
+(
+    StructureTypeId int          NOT NULL IDENTITY PRIMARY KEY,
+    StructureType   nvarchar(10) NULL,
+
+);
+GO
+
+-- Create table FISH.family
+
+DROP TABLE IF EXISTS FISH.Family
+GO
+
+CREATE TABLE FISH.Family
+(
+    FamilyId   int          NOT NULL IDENTITY PRIMARY KEY,
+    FamilyName nvarchar(50) NOT NULL,
+);
+GO
+-- Create table FISH.species
+
+DROP TABLE IF EXISTS FISH.Species
+GO
+
+CREATE TABLE FISH.Species
+(
+    SpeciesId      int          NOT NULL IDENTITY PRIMARY KEY,
+    FamilyId       int          NOT NULL,
+    Trophic        nvarchar(5)  NOT NULL,
+    CommonName     nvarchar(50) NOT NULL,
+    ScientificName nvarchar(50) NOT NULL,
+    CONSTRAINT FK_FISH_Family FOREIGN KEY(FamilyId)
+	  REFERENCES FISH.Family(FamilyId)
+);
+GO
+
+-- Create table SURVEY.Fish
+
+DROP TABLE IF EXISTS SURVEY.Fish
+GO
+
+CREATE TABLE SURVEY.Fish
+(
+    FishId          int        NOT NULL IDENTITY PRIMARY KEY,
+    StructureTypeId int        NOT NULL,
+    FishLength      decimal(6) NOT NULL,
+    FishCount       int        NOT NULL,
+    SpeciesId       int        NOT NULL,
+
+    CONSTRAINT FK_SURVEY_STRUCTURETYPE FOREIGN KEY(StructureTypeId)
+	  REFERENCES SURVEY.StructureType(StructureTypeId),
+    CONSTRAINT FK_FISH_SPECIES FOREIGN KEY(SpeciesId)
+	  REFERENCES FISH.Species(SpeciesId),
+
+);
+GO
+
+-- Create table SURVEY.survey
+
+DROP TABLE IF EXISTS SURVEY.Survey
+GO
+
+CREATE TABLE SURVEY.Survey
+(
+    SurveyIdex   int  NOT NULL PRIMARY KEY,
+    CoordId      int  NOT NULL,
+    SurveyDate   date NOT NULL,
+    RegionId     int  NOT NULL,
+    ManagementId int  NOT NULL,
+    BatchCodeId  int  NOT NULL,
+    CONSTRAINT FK_SURVEY_Coord FOREIGN KEY(CoordId)
+      REFERENCES SURVEY.Coord (CoordId),
+    CONSTRAINT FK_GEO_Region FOREIGN KEY(RegionId)
+      REFERENCES GEO.Region (RegionId),
+    CONSTRAINT FK_SURVEY_Management FOREIGN KEY(ManagementId)
+      REFERENCES SURVEY.Management (ManagementId),
+    CONSTRAINT FK_SURVEY_BatchCode FOREIGN KEY(BatchCodeId)
+	  REFERENCES SURVEY.BatchCode (BatchCodeId)
+);
+GO

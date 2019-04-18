@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="dae5b1ecc0834cd0952df59a7311db9e" Name="Diagram1" ZoomLevel="85">
+        <EntityTypeShape EntityType="FISHSURVEYModel.Family" Width="1.5" PointX="5.25" PointY="10.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="FISHSURVEYModel.Species" Width="1.5" PointX="7.5" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="FISHSURVEYModel.Trophic" Width="1.5" PointX="5.25" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="FISHSURVEYModel.Region" Width="1.5" PointX="0.75" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="FISHSURVEYModel.StudyArea" Width="1.5" PointX="5.25" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="FISHSURVEYModel.SubRegion" Width="1.5" PointX="3" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="FISHSURVEYModel.BatchCode" Width="1.5" PointX="5.25" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="FISHSURVEYModel.Fish" Width="1.5" PointX="9.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="FISHSURVEYModel.Management" Width="1.5" PointX="5.25" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="FISHSURVEYModel.StructureType" Width="1.5" PointX="7.5" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="FISHSURVEYModel.Survey" Width="1.5" PointX="7.5" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="FISHSURVEYModel.FK_FISH_Families" ManuallyRouted="false" />
+        <AssociationConnector Association="FISHSURVEYModel.FK_FISH_SPECIES" ManuallyRouted="false" />
+        <AssociationConnector Association="FISHSURVEYModel.FK_FISH_Trophics" ManuallyRouted="false" />
+        <AssociationConnector Association="FISHSURVEYModel.FK_GEO_Regions" ManuallyRouted="false" />
+        <AssociationConnector Association="FISHSURVEYModel.FK_GEO_StudyAreas" ManuallyRouted="false" />
+        <AssociationConnector Association="FISHSURVEYModel.FK_GEO_SubRegions" ManuallyRouted="false" />
+        <AssociationConnector Association="FISHSURVEYModel.FK_SURVEY_BatchCodes" ManuallyRouted="false" />
+        <AssociationConnector Association="FISHSURVEYModel.FK_SURVEY_STRUCTURETYPEs" ManuallyRouted="false" />
+        <AssociationConnector Association="FISHSURVEYModel.FK_SURVEY_Surveys" ManuallyRouted="false" />
+        <AssociationConnector Association="FISHSURVEYModel.FK_SURVEY_Managements" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
